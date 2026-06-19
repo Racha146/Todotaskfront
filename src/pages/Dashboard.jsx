@@ -26,7 +26,7 @@ export default function Dashboard(){
   const [tasktoedit,settasktoedit]=useState("");
     const [tasktodelet,settasktodelet]=useState("");
     const[fieledit,setfieledit]=useState("")
-    
+    const API_URL = "https://todotaskback-production.up.railway.app";
 // useEffect(() => {
 //     console.log(Dashuser);
 //     const TASK_KEY = `tasks_${Dashuser.username}`;
@@ -36,24 +36,25 @@ export default function Dashboard(){
 //     }
 //   }, []);
 const token = localStorage.getItem("token");
-  useEffect(() => {
-    if (!token) return;;
-    fetch("http://localhost:3000/tasks", {
-      headers: {
-        "Authorization": `Bearer ${token}`
-      }
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        setlisttask(Array.isArray(data) ? data : []);
-      });
-  
-  }, []);
+useEffect(() => {
+  if (!token) return;
 
+  fetch(`${API_URL}/tasks`, {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      setlisttask(Array.isArray(data) ? data : []);
+    })
+    .catch((err) => console.log("FETCH ERROR:", err));
+
+}, []);
   const AddTask = async (task) => {
     if (task.trim() === "") return;
 
-    const res = await fetch("http://localhost:3000/tasks", {
+    const res = await fetch(`${API_URL}/tasks`, {
       method: "POST",
       headers: { "Content-Type": "application/json" ,"Authorization": `Bearer ${token}`},
       
@@ -65,7 +66,7 @@ const token = localStorage.getItem("token");
   };
   
   const Delettask = async (Id) => {
-    const res = await fetch(`http://localhost:3000/tasks/${Id}`, {
+    const res = await fetch(`${API_URL}/tasks/${Id}`, {
       method: "DELETE",
       headers: {
         "Authorization": `Bearer ${token}`
@@ -78,7 +79,7 @@ const token = localStorage.getItem("token");
   
   const Edittask = async (Id, taskedited) => {
     const res = await fetch(
-      `http://localhost:3000/tasks/${Id}`,
+      `${API_URL}/tasks/${Id}`,
       {
         method: "PUT",
         headers: {
@@ -105,7 +106,7 @@ const token = localStorage.getItem("token");
   };
 
   const toggleComplete = async (id) => {
-    const res = await fetch(`http://localhost:3000/tasks/${id}/complete`, {
+    const res = await fetch(`${API_URL}/tasks/${id}/complete`, {
       method: "PATCH",
       headers: {
         Authorization: `Bearer ${token}`

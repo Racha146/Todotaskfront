@@ -18,7 +18,7 @@ const [username,seusername]=useState("");
   passwordErrors.length > 0 ||
   password !== cnfrmpass;
 
-
+  const API_URL = "https://todotaskback-production.up.railway.app";
   const validatePassword = (password) => {
     const errors = [];
   
@@ -50,7 +50,7 @@ const [username,seusername]=useState("");
   const handlsingup = async (e) => {
     e.preventDefault();
   
-    const res = await fetch("http://localhost:3000/signup", {
+    const res = await fetch(`${API_URL}/signup`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -63,12 +63,12 @@ const [username,seusername]=useState("");
     });
   
     const data = await res.json();
+    console.log(data);
   
-    if(data.success){
-      navigate("/login");
+    if (data.success) {
+      navigate("/dashboard");
     }
   };
-   
     return (
       <div className="flex items-center justify-center h-screen bg-[#0F172A]">
    <form
